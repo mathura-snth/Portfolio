@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-accent: #92baa1;
+  --color-accent: var(--accent);
   --color-accent-light: #b5d3c0;
   --color-dark-bg: #f7f5f2;
   --color-card-bg: #ffffff;
