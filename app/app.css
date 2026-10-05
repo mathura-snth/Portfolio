@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: #6ba684;
+  --color-accent-light: #8bbd9f;
+  --color-dark-bg: #1a2e23;
+  --color-card-bg: #2d4a3f;
+  --color-border: #3d5a4f;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  @apply bg-gradient-to-br from-dark-bg to-[#0f2818] text-white;
+  
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-accent rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent-light;
+}
+
+/* CSS Variables pour les composants React */
+:root {
+  --dark-bg: #1a2e23;
+  --card-bg: #2d4a3f;
+  --accent: #6ba684;
+  --accent-light: #8bbd9f;
+  --text-primary: #f5f5f5;
+  --text-secondary: #c8d4cc;
+  --border: #3d5a4f;
+}
