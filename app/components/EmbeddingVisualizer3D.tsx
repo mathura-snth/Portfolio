@@ -18,12 +18,23 @@ interface DataPoint {
 
 // GitHub repositories data
 const GITHUB_REPOS: DataPoint[] = [
-  { id: "cove", x: -15, y: 10, z: 5, category: "Research", label: "XAI-LLM-CoVe_Verification", github: "https://github.com/mathura-snth/XAI-LLM-CoVe_Verification", keywords: ["XAI", "LLM", "Counterfactual", "PyTorch"] },
-  { id: "dentarag", x: 8, y: -5, z: 12, category: "RAG", label: "DentaRAG", github: "https://github.com/mathura-snth/RAG_from_scratch", keywords: ["Hybrid Search", "LangChain", "FastAPI", "PostgreSQL"] },
-  { id: "nlp-recommend", x: 12, y: 8, z: -8, category: "NLP", label: "NLP-Movie-Recommender", github: "https://github.com/mathura-snth/NLP-Movie-Recommender-DWL", keywords: ["TF-IDF", "Sentence-Transformers", "nDCG", "Flask"] },
-  { id: "synthetic-bench", x: -10, y: -8, z: -12, category: "Research", label: "Synthetic-Benchmark", github: "https://github.com/mathura-snth/Math-LLM-Verifier", keywords: ["Formal Methods", "Theorem Proving", "Dataset Design"] },
-  { id: "study-notes", x: 14, y: -3, z: 8, category: "Education", label: "Study-Notes-M1", github: "https://github.com/mathu/study-notes", keywords: ["Deep Learning", "Optimization", "Linear Algebra"] },
-  { id: "routes-optimization", x: 5, y: 15, z: -10, category: "Algorithms", label: "Routes-Optimization", github: "https://github.com/mathura-snth/Advanced-Route-Optimization", keywords: ["lazy strategy", "Dijkstra", "A*", "Contraction Hierarchies", "CSR"] },
+  // --- LLM Research : explicabilité et vérification des LLM ---
+  { id: "cove", x: -14, y: 8, z: 4, category: "LLM Research", label: "XAI-LLM-CoVe_Verification", github: "https://github.com/mathura-snth/XAI-LLM-CoVe_Verification", keywords: ["XAI", "LLM", "Counterfactual", "PyTorch"] },
+  { id: "synthetic-bench", x: -10, y: 12, z: -3, category: "LLM Research", label: "Synthetic-Benchmark", github: "https://github.com/mathura-snth/Math-LLM-Verifier", keywords: ["Formal Methods", "Theorem Proving", "Dataset Design"] },
+
+  // --- LLM Applications : systèmes construits autour des LLM ---
+  { id: "dentarag", x: 6, y: -2, z: 13, category: "LLM Applications", label: "DentaRAG", github: "https://github.com/mathura-snth/RAG_from_scratch", keywords: ["Hybrid Search", "LangChain", "FastAPI", "PostgreSQL"] },
+  { id: "agentic-langgraph", x: 2, y: 2, z: 16, category: "LLM Applications", label: "Agentic-AI-Langgraph", github: "https://github.com/mathura-snth/Agentic-AI-Langgraph", keywords: ["LangGraph", "Multi-Agent", "Agentic AI", "LLM"] },
+
+  // --- NLP & Search ---
+  { id: "nlp-recommend", x: 13, y: 8, z: -7, category: "NLP & Search", label: "NLP-Movie-Recommender", github: "https://github.com/mathura-snth/NLP-Movie-Recommender-DWL", keywords: ["TF-IDF", "Sentence-Transformers", "nDCG", "Flask"] },
+
+  // --- Algorithms & Systems ---
+  { id: "routes-optimization", x: -6, y: -8, z: -13, category: "Algorithms & Systems", label: "Routes-Optimization", github: "https://github.com/mathura-snth/Advanced-Route-Optimization", keywords: ["lazy strategy", "Dijkstra", "A*", "Contraction Hierarchies", "CSR"] },
+  // TODO : remplacer par l'URL exacte du dépôt Java (2PC)
+  { id: "distributed-2pc", x: -1, y: -13, z: -9, category: "Algorithms & Systems", label: "Distributed-System-2PC", github: "https://github.com/mathura-snth", keywords: ["Java", "2PC", "Sockets", "Multithreading", "ReentrantLock"] },
+  { id: "mpi-distributed", x: -4, y: -12, z: -14, category: "Algorithms & Systems", label: "MPI-Distributed-Algorithms", github: "https://github.com/mathura-snth/MPI-Distributed-Algorithms", keywords: ["MPI", "Distributed Algorithms", "Parallel Computing"] },
+  { id: "microservices-demo", x: 1, y: -9, z: -12, category: "Algorithms & Systems", label: "Microservices-Architecture-Demo", github: "https://github.com/mathura-snth/Microservices-Architecture-Demo", keywords: ["Microservices", "Software Architecture"] },
 ];
 
 // Seulement les catégories réellement utilisées
