@@ -29,6 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#f7f5f2" />
         <Meta />
         <Links />
       </head>
@@ -63,10 +64,20 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+      <h1 style={{ color: "var(--accent-dark)", fontSize: "2rem", fontWeight: 700 }}>
+        {message}
+      </h1>
+      <p style={{ color: "var(--text-secondary)" }}>{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre
+          className="w-full p-4 overflow-x-auto"
+          style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: "0.5rem",
+            marginTop: "1rem",
+          }}
+        >
           <code>{stack}</code>
         </pre>
       )}

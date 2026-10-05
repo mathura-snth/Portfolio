@@ -1,8 +1,9 @@
-import React, { useRef, useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera, Html } from "@react-three/drei";
+import { OrbitControls, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
+import { CATEGORY_COLORS, GRID_COLORS } from "../components/theme";
 
 interface DataPoint {
   id: string;
@@ -12,7 +13,7 @@ interface DataPoint {
   category: string;
   label: string;
   github: string;
-  keywords: string[]; // <-- Ajouté
+  keywords: string[];
 }
 
 // GitHub repositories data
@@ -25,23 +26,27 @@ const GITHUB_REPOS: DataPoint[] = [
   { id: "routes-optimization", x: 5, y: 15, z: -10, category: "Algorithms", label: "Routes-Optimization", github: "https://github.com/mathura-snth/Advanced-Route-Optimization", keywords: ["lazy strategy", "Dijkstra", "A*", "Contraction Hierarchies", "CSR"] },
 ];
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Research: "#ff6666",
-  RAG: "#00ffb2",
-  NLP: "#33ccff",
-  ML: "#ffff4d",
-  Education: "#ffa366"
-};
+// Seulement les catégories réellement utilisées
+const USED_CATEGORIES = Array.from(new Set(GITHUB_REPOS.map((r) => r.category)));
+
+function colorOf(category: string): string {
+  return CATEGORY_COLORS[category] ?? "#92baa1";
+}
 
 function Legend() {
   return (
     <div className="legend">
       <h3>Categories</h3>
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        {Object.entries(CATEGORY_COLORS).map(([category, color]) => (
+        {USED_CATEGORIES.map((category) => (
           <div key={category} className="legend-item">
-            <span className="legend-color" style={{ backgroundColor: color }}></span>
-            <span style={{ color: "#b0b8d4", fontSize: "0.9rem" }}>{category}</span>
+            <span
+              className="legend-color"
+              style={{ backgroundColor: colorOf(category) }}
+            ></span>
+            <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+              {category}
+            </span>
           </div>
         ))}
       </div>
@@ -63,28 +68,36 @@ function ProjectPoints({ data }: { data: DataPoint[] }) {
     <group ref={groupRef}>
       {data.map((point) => {
         const isHovered = hoveredNode?.id === point.id;
-        
+        const color = colorOf(point.category);
+
         return (
-          <group 
-            key={point.id} 
+          <group
+            key={point.id}
             position={[point.x, point.y, point.z]}
-            onPointerOver={(e) => { e.stopPropagation(); setHoveredNode(point); }}
-            onPointerOut={() => setHoveredNode(null)}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              setHoveredNode(point);
+              document.body.style.cursor = "pointer";
+            }}
+            onPointerOut={() => {
+              setHoveredNode(null);
+              document.body.style.cursor = "auto";
+            }}
             onClick={() => window.open(point.github, "_blank")}
           >
             {/* Core sphere */}
             <mesh>
               <sphereGeometry args={[0.5, 16, 16]} />
-              <meshBasicMaterial color={CATEGORY_COLORS[point.category]} />
+              <meshBasicMaterial color={color} />
             </mesh>
 
             {/* Glow sphere */}
             <mesh>
               <sphereGeometry args={[isHovered ? 1.5 : 1.2, 16, 16]} />
-              <meshBasicMaterial 
-                color={CATEGORY_COLORS[point.category]} 
-                transparent 
-                opacity={isHovered ? 0.4 : 0.15} 
+              <meshBasicMaterial
+                color={color}
+                transparent
+                opacity={isHovered ? 0.35 : 0.18}
                 depthWrite={false}
               />
             </mesh>
@@ -92,30 +105,42 @@ function ProjectPoints({ data }: { data: DataPoint[] }) {
             {/* Tooltip on hover with keywords */}
             {isHovered && (
               <Html distanceFactor={40} center>
-                <div style={{
-                  background: 'rgba(10, 14, 39, 0.95)',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  border: `1px solid ${CATEGORY_COLORS[point.category]}`,
-                  color: 'white',
-                  width: '220px',
-                  pointerEvents: 'none',
-                  backdropFilter: 'blur(4px)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
-                }}>
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.95)",
+                    padding: "12px 16px",
+                    borderRadius: "8px",
+                    border: `1px solid ${color}`,
+                    color: "#2b3a33",
+                    width: "220px",
+                    pointerEvents: "none",
+                    backdropFilter: "blur(4px)",
+                    boxShadow: "0 8px 32px rgba(62, 90, 78, 0.2)",
+                  }}
+                >
                   <strong>{point.label}</strong>
-                  <div style={{ fontSize: '0.8rem', color: '#b0b8d4', marginTop: '2px', marginBottom: '8px' }}>
+                  <div
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "#5c6b63",
+                      marginTop: "2px",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {point.category}
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                    {point.keywords.map((keyword, i) => (
-                      <span key={i} style={{
-                        background: 'rgba(245, 166, 35, 0.15)',
-                        color: '#ffc066',
-                        padding: '2px 6px',
-                        borderRadius: '4px',
-                        fontSize: '0.7rem'
-                      }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                    {point.keywords.map((keyword) => (
+                      <span
+                        key={keyword}
+                        style={{
+                          background: "rgba(146, 186, 161, 0.2)",
+                          color: "#3e5a4e",
+                          padding: "2px 6px",
+                          borderRadius: "4px",
+                          fontSize: "0.7rem",
+                        }}
+                      >
                         {keyword}
                       </span>
                     ))}
@@ -147,14 +172,20 @@ export default function EmbeddingVisualizer3D() {
       </div>
 
       <div className="canvas-wrapper">
-        <Canvas camera={{ position: [0, 10, 40], fov: 60 }} style={{ background: "transparent" }}>
+        <Canvas
+          camera={{ position: [0, 10, 40], fov: 60 }}
+          style={{ background: "transparent" }}
+        >
           <ambientLight intensity={0.5} />
           <ProjectPoints data={GITHUB_REPOS} />
-          <gridHelper args={[60, 20, "#2a2f4a", "#1a1f3a"]} position={[0, -20, 0]} />
-          <OrbitControls 
-            enableDamping 
-            dampingFactor={0.05} 
-            minDistance={10} 
+          <gridHelper
+            args={[60, 20, GRID_COLORS.main, GRID_COLORS.secondary]}
+            position={[0, -20, 0]}
+          />
+          <OrbitControls
+            enableDamping
+            dampingFactor={0.05}
+            minDistance={10}
             maxDistance={80}
           />
         </Canvas>
@@ -175,7 +206,13 @@ export default function EmbeddingVisualizer3D() {
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ duration: 0.3 }}
             >
-              <span className="badge" style={{ color: CATEGORY_COLORS[repo.category], borderColor: CATEGORY_COLORS[repo.category] }}>
+              <span
+                className="badge"
+                style={{
+                  color: colorOf(repo.category),
+                  borderColor: colorOf(repo.category),
+                }}
+              >
                 {repo.category}
               </span>
               <h4>{repo.label}</h4>
@@ -185,25 +222,29 @@ export default function EmbeddingVisualizer3D() {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        .embedding-container { width: 100%; padding: 3rem 2rem; background: rgba(26, 31, 58, 0.3); border-radius: 1rem; margin-bottom: 3rem; }
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .embedding-container { width: 100%; padding: 3rem 2rem; background: rgb(var(--surface-rgb) / 0.6); border: 1px solid var(--border); border-radius: 1rem; margin-bottom: 3rem; }
         .viz-header { text-align: center; margin-bottom: 2rem; }
-        .canvas-wrapper { width: 100%; height: 500px; border: 1px solid #2a2f4a; border-radius: 0.75rem; overflow: hidden; margin-bottom: 2rem; background: rgba(10, 14, 39, 0.5); cursor: grab; }
+        .canvas-wrapper { width: 100%; height: 500px; border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; margin-bottom: 2rem; background: var(--surface); cursor: grab; box-shadow: 0 2px 10px rgba(62, 90, 78, 0.06); }
         .canvas-wrapper:active { cursor: grabbing; }
-        .legend { background: #1a1f3a; border: 1px solid #2a2f4a; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2rem; }
-        .legend h3 { margin-bottom: 1rem; color: #f5a623; }
+        .legend { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2rem; }
+        .legend h3 { margin-bottom: 1rem; color: var(--accent-dark); }
         .legend-item { display: flex; align-items: center; margin-bottom: 0.5rem; }
         .legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 0.5rem; }
         .repos-list { margin-top: 2rem; }
-        .repos-list h3 { color: #f5a623; margin-bottom: 1rem; font-size: 1.3rem; }
+        .repos-list h3 { color: var(--accent-dark); margin-bottom: 1rem; font-size: 1.3rem; }
         .repos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
-        .repo-card { background: #1a1f3a; border: 1px solid #2a2f4a; border-radius: 0.75rem; padding: 1rem; transition: all 0.3s; cursor: pointer; text-decoration: none; display: block; }
-        .repo-card:hover { border-color: #f5a623; box-shadow: 0 8px 24px rgba(245, 166, 35, 0.1); }
-        .repo-card .badge { display: inline-block; background: rgba(255, 255, 255, 0.05); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; margin-bottom: 0.5rem; border: 1px solid transparent; }
-        .repo-card h4 { color: #fff; margin-bottom: 0.5rem; font-size: 0.95rem; }
-        .repo-card p { color: #b0b8d4; font-size: 0.85rem; margin: 0; }
+        .repo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; transition: all 0.3s; cursor: pointer; text-decoration: none; display: block; box-shadow: 0 2px 10px rgba(62, 90, 78, 0.06); }
+        .repo-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(62, 90, 78, 0.12); }
+        .repo-card .badge { display: inline-block; background: rgb(var(--accent-rgb) / 0.15); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; border: 1px solid transparent; }
+        .repo-card h4 { color: var(--text-primary); margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .repo-card p { color: var(--accent-text); font-size: 0.85rem; margin: 0; }
         @media (max-width: 768px) { .embedding-container { padding: 2rem 1rem; } .canvas-wrapper { height: 350px; } .repos-grid { grid-template-columns: 1fr; } }
-      `}} />
+      `,
+        }}
+      />
     </motion.div>
   );
 }

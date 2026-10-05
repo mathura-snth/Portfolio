@@ -1,22 +1,50 @@
 @import "tailwindcss";
 
+@import "tailwindcss";
+
 @theme {
-  --color-accent: #6ba684;
-  --color-accent-light: #8bbd9f;
-  --color-dark-bg: #1a2e23;
-  --color-card-bg: #2d4a3f;
-  --color-border: #3d5a4f;
+  --color-accent: #92baa1;
+  --color-accent-light: #b5d3c0;
+  --color-dark-bg: #f7f5f2;
+  --color-card-bg: #ffffff;
+  --color-border: #d9e3dc;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 html,
 body {
-  @apply bg-gradient-to-br from-dark-bg to-[#0f2818] text-white;
-  
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-deep) 100%);
+  color: var(--text-primary);
+  color-scheme: light;
+}
+
+::-webkit-scrollbar { @apply w-2; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); @apply rounded; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-dark); }
+
+:root {
+  --bg: #f7f5f2;
+  --bg-deep: #ece9e4;
+  --surface: #ffffff;
+  --border: #d9e3dc;
+
+  --accent: #92baa1;        /* sauge du bandeau : fonds, badges, bordures */
+  --accent-light: #b5d3c0;
+  --accent-text: #4f7a64;   /* sauge foncé : liens, chiffres (contraste OK sur blanc) */
+  --accent-dark: #3e5a4e;   /* vert-gris des titres du CV : titres, boutons */
+
+  --text-primary: #2b3a33;
+  --text-secondary: #5c6b63;
+
+  --accent-rgb: 146 186 161;
+  --bg-rgb: 247 245 242;
+  --surface-rgb: 255 255 255;
+
+  /* alias pour index.css */
+  --dark-bg: var(--bg);
+  --card-bg: var(--surface);
 }
 
 ::-webkit-scrollbar {
@@ -33,15 +61,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-accent-light;
-}
-
-/* CSS Variables pour les composants React */
-:root {
-  --dark-bg: #1a2e23;
-  --card-bg: #2d4a3f;
-  --accent: #6ba684;
-  --accent-light: #8bbd9f;
-  --text-primary: #f5f5f5;
-  --text-secondary: #c8d4cc;
-  --border: #3d5a4f;
 }

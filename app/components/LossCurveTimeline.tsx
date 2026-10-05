@@ -1,6 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import type { SVGProps } from "react";
 
 interface EpochData {
   epoch: number;
@@ -61,14 +60,19 @@ interface PathSegment {
   y: number;
 }
 
-function generateCurvePath(epochs: EpochData[], width: number, height: number): PathSegment[] {
+function generateCurvePath(
+  epochs: EpochData[],
+  width: number,
+  height: number
+): PathSegment[] {
   const padding = 80;
   const maxEpoch = epochs.length;
   const minLoss = 0;
   const maxLoss = 1;
 
   return epochs.map((epoch) => {
-    const x = padding + ((epoch.epoch - 1) / (maxEpoch - 1)) * (width - 2 * padding);
+    const x =
+      padding + ((epoch.epoch - 1) / (maxEpoch - 1)) * (width - 2 * padding);
     const y =
       height -
       padding -
@@ -101,20 +105,11 @@ function createSmoothPath(points: PathSegment[]): string {
 }
 
 export default function LossCurveTimeline() {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [pathLength, setPathLength] = useState(0);
   const [expandedEpoch, setExpandedEpoch] = useState<number | null>(null);
 
   const svgWidth = 900;
   const svgHeight = 500;
   const padding = 80;
-
-  useEffect(() => {
-    const path = svgRef.current?.querySelector("path.curve-path") as SVGPathElement;
-    if (path) {
-      setPathLength(path.getTotalLength());
-    }
-  }, []);
 
   const pathSegments = generateCurvePath(EPOCHS_DATA, svgWidth, svgHeight);
   const smoothPath = createSmoothPath(pathSegments);
@@ -135,29 +130,25 @@ export default function LossCurveTimeline() {
       </div>
 
       <div className="svg-wrapper">
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="loss-curve-svg"
-        >
+        <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="loss-curve-svg">
           {/* Grid lines */}
-          {[0.2, 0.4, 0.6, 0.8].map((loss, i) => (
-            <g key={`grid-${i}`}>
+          {[0.2, 0.4, 0.6, 0.8].map((loss) => (
+            <g key={`grid-${loss}`}>
               <line
                 x1={padding}
                 y1={svgHeight - padding - loss * (svgHeight - 2 * padding)}
                 x2={svgWidth - padding}
                 y2={svgHeight - padding - loss * (svgHeight - 2 * padding)}
-                stroke="#2a2f4a"
+                stroke="var(--border)"
                 strokeDasharray="4"
-                opacity="0.5"
+                opacity="0.8"
               />
               <text
                 x={padding - 10}
                 y={svgHeight - padding - loss * (svgHeight - 2 * padding) + 5}
                 textAnchor="end"
                 fontSize="12"
-                fill="#b0b8d4"
+                fill="var(--text-secondary)"
               >
                 {loss.toFixed(1)}
               </text>
@@ -170,7 +161,7 @@ export default function LossCurveTimeline() {
             y1={svgHeight - padding}
             x2={svgWidth - padding}
             y2={svgHeight - padding}
-            stroke="#2a2f4a"
+            stroke="var(--border)"
             strokeWidth="2"
           />
 
@@ -180,46 +171,51 @@ export default function LossCurveTimeline() {
             y1={padding}
             x2={padding}
             y2={svgHeight - padding}
-            stroke="#2a2f4a"
+            stroke="var(--border)"
             strokeWidth="2"
           />
 
           {/* Axis labels */}
-          <text x={svgWidth / 2} y={svgHeight - 20} textAnchor="middle" fill="#b0b8d4" fontSize="14">
+          <text
+            x={svgWidth / 2}
+            y={svgHeight - 20}
+            textAnchor="middle"
+            fill="var(--text-secondary)"
+            fontSize="14"
+          >
             Epochs
           </text>
           <text
             x={30}
             y={svgHeight / 2}
             textAnchor="middle"
-            fill="#b0b8d4"
+            fill="var(--text-secondary)"
             fontSize="14"
             transform={`rotate(-90 30 ${svgHeight / 2})`}
           >
             Loss
           </text>
 
+          {/* Glow effect */}
+          <path
+            d={smoothPath}
+            stroke="var(--accent)"
+            strokeWidth="10"
+            fill="none"
+            opacity="0.3"
+            style={{ filter: "blur(4px)" }}
+          />
+
           {/* Main curve */}
           <motion.path
-            className="curve-path"
             d={smoothPath}
-            stroke="#f5a623"
+            stroke="var(--accent-text)"
             strokeWidth="3"
             fill="none"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
             transition={{ duration: 2.5, ease: "easeInOut" }}
             viewport={{ once: true }}
-          />
-
-          {/* Glow effect */}
-          <path
-            d={smoothPath}
-            stroke="#f5a623"
-            strokeWidth="8"
-            fill="none"
-            opacity="0.2"
-            filter="blur(4px)"
           />
 
           {/* Data points with stagger animation */}
@@ -233,14 +229,15 @@ export default function LossCurveTimeline() {
                 delay: 0.1 + index * 0.4,
               }}
               viewport={{ once: true }}
+              style={{ transformOrigin: `${point.x}px ${point.y}px` }}
             >
               {/* Glow circle */}
               <circle
                 cx={point.x}
                 cy={point.y}
                 r="12"
-                fill="#f5a623"
-                opacity="0.2"
+                fill="var(--accent)"
+                opacity="0.3"
               />
 
               {/* Main circle */}
@@ -248,21 +245,10 @@ export default function LossCurveTimeline() {
                 cx={point.x}
                 cy={point.y}
                 r="6"
-                fill="#f5a623"
-                className="data-point"
-              />
-
-              {/* Hover interaction */}
-              <motion.circle
-                cx={point.x}
-                cy={point.y}
-                r="8"
-                fill="none"
-                stroke="#f5a623"
+                fill="var(--accent-text)"
+                stroke="var(--surface)"
                 strokeWidth="2"
-                opacity="0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                className="data-point"
               />
             </motion.g>
           ))}
@@ -275,10 +261,10 @@ export default function LossCurveTimeline() {
               y={svgHeight - padding + 40}
               textAnchor="middle"
               fontSize="12"
-              fill="#b0b8d4"
+              fill="var(--text-secondary)"
               className="epoch-label"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               transition={{
                 duration: 0.5,
                 delay: 0.1 + index * 0.4,
@@ -297,9 +283,13 @@ export default function LossCurveTimeline() {
           {EPOCHS_DATA.map((epoch) => (
             <motion.div
               key={epoch.epoch}
-              className={`epoch-card ${expandedEpoch === epoch.epoch ? "expanded" : ""}`}
+              className={`epoch-card ${
+                expandedEpoch === epoch.epoch ? "expanded" : ""
+              }`}
               onClick={() =>
-                setExpandedEpoch(expandedEpoch === epoch.epoch ? null : epoch.epoch)
+                setExpandedEpoch(
+                  expandedEpoch === epoch.epoch ? null : epoch.epoch
+                )
               }
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
@@ -335,11 +325,14 @@ export default function LossCurveTimeline() {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .loss-curve-container {
           width: 100%;
           padding: 3rem 2rem;
-          background: rgba(26, 31, 58, 0.3);
+          background: rgb(var(--surface-rgb) / 0.6);
+          border: 1px solid var(--border);
           border-radius: 1rem;
           margin-bottom: 3rem;
         }
@@ -349,27 +342,14 @@ export default function LossCurveTimeline() {
           margin-bottom: 2rem;
         }
 
-        .section-title {
-          font-size: 2.5rem;
-          background: linear-gradient(135deg, #f5a623 0%, #ffc066 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          margin-bottom: 0.5rem;
-        }
-
-        .section-subtitle {
-          color: #b0b8d4;
-          font-size: 1rem;
-        }
-
         .svg-wrapper {
-          background: #0a0e27;
-          border: 1px solid #2a2f4a;
+          background: var(--surface);
+          border: 1px solid var(--border);
           border-radius: 0.75rem;
           padding: 2rem;
           margin-bottom: 2rem;
           overflow-x: auto;
+          box-shadow: 0 2px 10px rgba(62, 90, 78, 0.06);
         }
 
         .loss-curve-svg {
@@ -385,7 +365,7 @@ export default function LossCurveTimeline() {
 
         .data-point:hover {
           r: 8;
-          filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.6));
+          filter: drop-shadow(0 0 8px rgb(var(--accent-rgb) / 0.8));
         }
 
         .epochs-details {
@@ -399,23 +379,24 @@ export default function LossCurveTimeline() {
         }
 
         .epoch-card {
-          background: #1a1f3a;
-          border: 1px solid #2a2f4a;
+          background: var(--surface);
+          border: 1px solid var(--border);
           border-radius: 0.75rem;
           padding: 1.5rem;
           cursor: pointer;
           transition: all 0.3s;
           position: relative;
+          box-shadow: 0 2px 10px rgba(62, 90, 78, 0.06);
         }
 
         .epoch-card:hover {
-          border-color: #f5a623;
-          box-shadow: 0 8px 24px rgba(245, 166, 35, 0.1);
+          border-color: var(--accent);
+          box-shadow: 0 8px 24px rgba(62, 90, 78, 0.12);
         }
 
         .epoch-card.expanded {
-          border-color: #f5a623;
-          box-shadow: 0 12px 32px rgba(245, 166, 35, 0.15);
+          border-color: var(--accent-text);
+          box-shadow: 0 12px 32px rgba(62, 90, 78, 0.18);
         }
 
         .epoch-header {
@@ -424,28 +405,29 @@ export default function LossCurveTimeline() {
 
         .epoch-number {
           display: inline-block;
-          background: rgba(245, 166, 35, 0.1);
-          color: #f5a623;
+          background: rgb(var(--accent-rgb) / 0.25);
+          color: var(--accent-dark);
           padding: 0.25rem 0.75rem;
           border-radius: 1rem;
           font-size: 0.8rem;
+          font-weight: 600;
           margin-bottom: 0.5rem;
         }
 
         .epoch-card h3 {
-          color: #fff;
+          color: var(--text-primary);
           margin: 0;
           font-size: 1.2rem;
         }
 
         .epoch-timestamp {
-          color: #b0b8d4;
+          color: var(--text-secondary);
           font-size: 0.9rem;
           margin: 0.5rem 0;
         }
 
         .epoch-description {
-          color: #b0b8d4;
+          color: var(--text-secondary);
           font-size: 0.95rem;
           line-height: 1.5;
           margin: 1rem 0;
@@ -456,7 +438,7 @@ export default function LossCurveTimeline() {
         }
 
         .achievements h4 {
-          color: #f5a623;
+          color: var(--accent-dark);
           font-size: 0.9rem;
           margin-bottom: 0.75rem;
           margin-top: 1rem;
@@ -468,7 +450,7 @@ export default function LossCurveTimeline() {
         }
 
         .achievements li {
-          color: #b0b8d4;
+          color: var(--text-secondary);
           font-size: 0.85rem;
           margin-bottom: 0.5rem;
           padding-left: 1rem;
@@ -478,8 +460,8 @@ export default function LossCurveTimeline() {
           position: absolute;
           top: 1rem;
           right: 1rem;
-          background: rgba(245, 166, 35, 0.1);
-          color: #f5a623;
+          background: rgb(var(--accent-rgb) / 0.25);
+          color: var(--accent-dark);
           padding: 0.5rem 1rem;
           border-radius: 1rem;
           font-size: 0.85rem;
@@ -498,11 +480,10 @@ export default function LossCurveTimeline() {
           .epochs-grid {
             grid-template-columns: 1fr;
           }
-
-          .section-title {
-            font-size: 1.8rem;
-          }
-      `}} />
-      </motion.div>
+        }
+      `,
+        }}
+      />
+    </motion.div>
   );
 }

@@ -77,12 +77,12 @@ function NavBar() {
         </motion.h1>
         <ul className="nav-links">
           {["About", "Projects", "Experience"].map((item) => (
-            <motion.li key={item} whileHover={{ color: "#f5a623" }} transition={{ duration: 0.2 }}>
+            <motion.li key={item} whileHover={{ color: "#4f7a64" }} transition={{ duration: 0.2 }}>
               <a href={`/#${item.toLowerCase()}`}>{item}</a>
             </motion.li>
           ))}
           {/* Nouveau lien vers la page de notes */}
-          <motion.li whileHover={{ color: "#f5a623" }} transition={{ duration: 0.2 }}>
+          <motion.li whileHover={{ color: "#4f7a64" }} transition={{ duration: 0.2 }}>
             <a href="/notes">Lecture notes</a>
           </motion.li>
         </ul>
@@ -196,7 +196,7 @@ function ProjectCard({ project }: { project: Project }) {
       rel="noopener noreferrer"
       className="project-card"
       variants={itemVariants}
-      whileHover={{ y: -10, boxShadow: "0 20px 40px rgba(245, 166, 35, 0.15)" }}
+      whileHover={{ y: -10, boxShadow: "0 20px 40px rgba(62, 90, 78, 0.15)" }}
       transition={{ duration: 0.3 }}
     >
       <span className="badge">{project.category}</span>
