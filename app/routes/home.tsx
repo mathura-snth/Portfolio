@@ -560,12 +560,6 @@ const projects: Project[] = [
     tech: ["Dijkstra", "A*", "Contraction Hierarchies"],
     href: "https://github.com/mathura-snth/Advanced-Route-Optimization",
   },
-  {
-    title: "EducAid - Student Performance Prediction",
-    category: "Machine Learning",
-    description: "ML ensemble for predicting academic outcomes.",
-    tech: ["XGBoost", "CatBoost", "Python"],
-  },
 ];
 
 function FeaturedProjects() {
