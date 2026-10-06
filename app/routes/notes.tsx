@@ -1,99 +1,157 @@
 import { useState } from "react";
+import "../styles/index.css";
+
+type CategoryId = "math" | "theory" | "systems" | "ai";
 
 interface Note {
   id: string;
   title: string;
-  category: string;
+  category: CategoryId;
   path: string;
 }
 
+const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [
+  {
+    id: "ai",
+    label: "AI & NLP",
+    blurb: "Natural language processing.",
+  },
+  {
+    id: "math",
+    label: "Mathematics",
+    blurb: "Linear algebra, analysis and topology.",
+  },
+  {
+    id: "theory",
+    label: "Theory & Algorithms",
+    blurb: "Data structures, computability, complexity and type systems.",
+  },
+  {
+    id: "systems",
+    label: "Systems & Data",
+    blurb: "Distributed systems, software architecture and databases.",
+  },
+];
+
 const NOTES: Note[] = [
-  {
-    id: "advanced-data-structures",
-    title: "Advanced Data Structures",
-    category: "CS",
-    path: "/pdfs/Advanced-Data-Structures.pdf",
-  },
-  {
-    id: "computability-complexity",
-    title: "Computability & Complexity",
-    category: "Theory",
-    path: "/pdfs/Computability-Complexity.pdf",
-  },
-  {
-    id: "distributed-systems",
-    title: "Distributed Systems",
-    category: "Systems",
-    path: "/pdfs/Distributed-Systems.pdf",
-  },
-  {
-    id: "sql-databases",
-    title: "SQL & Relational Databases",
-    category: "Databases",
-    path: "/pdfs/Exercices-SQL-Relational-Databases.pdf",
-  },
-  {
-    id: "lambda-calculus",
-    title: "Lambda Calculus & Type Systems",
-    category: "Theory",
-    path: "/pdfs/Lambda-Calculus-Type-Systems.pdf",
-  },
+  // Mathematics
   {
     id: "linear-algebra",
     title: "Linear Algebra",
-    category: "Math",
+    category: "math",
     path: "/pdfs/Linear-Abstract-Algebra.pdf",
   },
   {
     id: "math-analysis",
     title: "Mathematical Analysis",
-    category: "Math",
+    category: "math",
     path: "/pdfs/Mathematical-Analysis.pdf",
-  },
-  {
-    id: "nlp",
-    title: "Natural Language Processing",
-    category: "AI",
-    path: "/pdfs/NPL.pdf",
-  },
-  {
-    id: "software-architecture",
-    title: "Software Architecture & Docker",
-    category: "DevOps",
-    path: "/pdfs/Software-Architecture-Docker.pdf",
   },
   {
     id: "topology",
     title: "Topology",
-    category: "Math",
+    category: "math",
     path: "/pdfs/Topology.pdf",
+  },
+
+  // Theory & Algorithms
+  {
+    id: "advanced-data-structures",
+    title: "Advanced Data Structures",
+    category: "theory",
+    path: "/pdfs/Advanced-Data-Structures.pdf",
+  },
+  {
+    id: "computability-complexity",
+    title: "Computability & Complexity",
+    category: "theory",
+    path: "/pdfs/Computability-Complexity.pdf",
+  },
+  {
+    id: "lambda-calculus",
+    title: "Lambda Calculus & Type Systems",
+    category: "theory",
+    path: "/pdfs/Lambda-Calculus-Type-Systems.pdf",
+  },
+
+  // Systems & Data
+  {
+    id: "distributed-systems",
+    title: "Distributed Systems",
+    category: "systems",
+    path: "/pdfs/Distributed-Systems.pdf",
+  },
+  {
+    id: "software-architecture",
+    title: "Software Architecture & Docker",
+    category: "systems",
+    path: "/pdfs/Software-Architecture-Docker.pdf",
+  },
+  {
+    id: "sql-databases",
+    title: "SQL & Relational Databases",
+    category: "systems",
+    path: "/pdfs/Exercices-SQL-Relational-Databases.pdf",
+  },
+
+  // AI & NLP
+  {
+    id: "nlp",
+    title: "Natural Language Processing",
+    category: "ai",
+    path: "/pdfs/NPL.pdf",
   },
 ];
 
-function filterButtonStyle(active: boolean): React.CSSProperties {
+function PdfIcon() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5" />
+      <path d="M9 13h6M9 17h4" />
+    </svg>
+  );
+}
+
+function pillStyle(active: boolean): React.CSSProperties {
   return {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.5rem",
     background: active ? "var(--accent-dark)" : "transparent",
     color: active ? "#fff" : "var(--accent-dark)",
-    padding: "0.75rem 1.5rem",
+    padding: "0.5rem 1.1rem",
     border: "1px solid var(--accent-dark)",
-    borderRadius: "0.5rem",
+    borderRadius: "999px",
     cursor: "pointer",
     fontWeight: 600,
-    transition: "all 0.3s",
+    fontSize: "0.95rem",
+    transition: "background 0.2s, color 0.2s",
   };
 }
 
 export default function Notes() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selected, setSelected] = useState<CategoryId | null>(null);
 
-  const categories = Array.from(new Set(NOTES.map((n) => n.category)));
-  const filteredNotes = selectedCategory
-    ? NOTES.filter((n) => n.category === selectedCategory)
+  const visibleNotes = selected
+    ? NOTES.filter((n) => n.category === selected)
     : NOTES;
+  const labelOf = (id: CategoryId) =>
+    CATEGORIES.find((c) => c.id === id)?.label ?? id;
 
   return (
-    <div style={{ padding: "4rem 2rem", minHeight: "100vh" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <div style={{ padding: "clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem)", minHeight: "100vh" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
         <a
           href="/"
           style={{
@@ -108,8 +166,11 @@ export default function Notes() {
 
         <h1
           style={{
-            fontSize: "3rem",
-            marginBottom: "0.5rem",
+            fontSize: "clamp(2.25rem, 7vw, 3.25rem)",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.1,
+            marginBottom: "0.75rem",
             background:
               "linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-text) 100%)",
             WebkitBackgroundClip: "text",
@@ -123,119 +184,147 @@ export default function Notes() {
           style={{
             color: "var(--text-secondary)",
             fontSize: "1.1rem",
+            maxWidth: "40rem",
+            marginBottom: "0.5rem",
+          }}
+        >
+          Notes from my coursework in mathematics and computer science, as PDFs.
+        </p>
+        <p
+          style={{
+            color: "var(--text-secondary)",
+            fontSize: "0.95rem",
             marginBottom: "2rem",
           }}
         >
-          My comprehensive study materials from M1 AI and related coursework
+          {NOTES.length} documents across {CATEGORIES.length} topics
         </p>
 
-        {/* Category Filter */}
+        {/* Filtres */}
         <div
+          role="group"
+          aria-label="Filter notes by topic"
           style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: "1rem",
-            marginBottom: "2rem",
+            gap: "0.75rem",
+            marginBottom: "3rem",
           }}
         >
           <button
-            onClick={() => setSelectedCategory(null)}
-            style={filterButtonStyle(selectedCategory === null)}
+            type="button"
+            onClick={() => setSelected(null)}
+            aria-pressed={selected === null}
+            style={pillStyle(selected === null)}
           >
-            All ({NOTES.length})
+            All <span style={{ opacity: 0.7 }}>{NOTES.length}</span>
           </button>
-          {categories.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              style={filterButtonStyle(selectedCategory === cat)}
+              type="button"
+              key={cat.id}
+              onClick={() => setSelected(cat.id)}
+              aria-pressed={selected === cat.id}
+              style={pillStyle(selected === cat.id)}
             >
-              {cat} ({NOTES.filter((n) => n.category === cat).length})
+              {cat.label}{" "}
+              <span style={{ opacity: 0.7 }}>
+                {NOTES.filter((n) => n.category === cat.id).length}
+              </span>
             </button>
           ))}
         </div>
 
-        {/* Notes Grid */}
+        {/* Grille */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: "1.5rem",
+            gridTemplateColumns:
+              "repeat(auto-fill, minmax(min(250px, 100%), 1fr))",
+            gap: "1.25rem",
           }}
         >
-          {filteredNotes.map((note) => (
+          {visibleNotes.map((note) => (
             <a
               key={note.id}
               href={note.path}
               target="_blank"
               rel="noopener noreferrer"
+              className="surface-card"
               style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "0.75rem",
-                padding: "1.5rem",
-                textDecoration: "none",
                 display: "flex",
                 flexDirection: "column",
-                cursor: "pointer",
-                transition: "all 0.3s",
-                boxShadow: "0 2px 10px rgba(62, 90, 78, 0.06)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--accent)";
-                el.style.boxShadow = "0 8px 24px rgba(62, 90, 78, 0.15)";
-                el.style.transform = "translateY(-5px)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--border)";
-                el.style.boxShadow = "0 2px 10px rgba(62, 90, 78, 0.06)";
-                el.style.transform = "translateY(0)";
+                gap: "1rem",
+                textDecoration: "none",
               }}
             >
               <div
                 style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                  color: "var(--accent-dark)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                📄
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "2.75rem",
+                    height: "2.75rem",
+                    borderRadius: "0.6rem",
+                    background: "rgb(var(--accent-rgb) / 0.2)",
+                    color: "var(--accent-dark)",
+                  }}
+                >
+                  <PdfIcon />
+                </span>
+                <span
+                  style={{
+                    color: "var(--text-secondary)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  PDF
+                </span>
               </div>
+
               <h3
                 style={{
                   color: "var(--text-primary)",
-                  marginBottom: "0.5rem",
                   fontSize: "1.1rem",
+                  fontWeight: 600,
+                  lineHeight: 1.35,
                 }}
               >
                 {note.title}
               </h3>
-              <span
+
+              <div
                 style={{
-                  display: "inline-block",
-                  background: "rgb(var(--accent-rgb) / 0.25)",
-                  color: "var(--accent-dark)",
-                  padding: "0.25rem 0.75rem",
-                  borderRadius: "1rem",
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "0.75rem",
                   marginTop: "auto",
-                  width: "fit-content",
                 }}
               >
-                {note.category}
-              </span>
-              <p
-                style={{
-                  color: "var(--accent-text)",
-                  fontSize: "0.9rem",
-                  marginTop: "1rem",
-                }}
-              >
-                View PDF →
-              </p>
+                <span className="tag" style={{ margin: 0 }}>
+                  {labelOf(note.category)}
+                </span>
+                <span
+                  style={{
+                    color: "var(--accent-text)",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Open PDF →
+                </span>
+              </div>
             </a>
           ))}
         </div>

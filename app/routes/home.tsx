@@ -1,62 +1,96 @@
 import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import EmbeddingVisualizer3D from "~/components/EmbeddingVisualizer3D";
 import LossCurveTimeline from "~/components/LossCurveTimeline";
 import "../styles/index.css";
 
-// ============ ANIMATION VARIANTS ============
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+export function meta() {
+  return [
+    { title: "Mathura Santhalingam | M2 AI student, XAI research" },
+    {
+      name: "description",
+      content:
+        "M2 AI student at Université Sorbonne Paris Nord and research intern at LIPN, working on the verification and explainability of LLMs.",
     },
-  },
-};
+  ];
+}
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
+// ============ SMALL HELPERS ============
+// Apparition au scroll : chaque bloc s'anime seul (pas de propagation parent/enfant)
+function Reveal({
+  children,
+  delay = 0,
+  style,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <motion.div
+      style={style}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
+function SectionHeading({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div style={{ marginBottom: "2.5rem" }}>
+      <h2 className="section-title">{title}</h2>
+      {subtitle && (
+        <p className="section-subtitle" style={{ marginBottom: 0 }}>
+          {subtitle}
+        </p>
+      )}
+    </div>
+  );
+}
 
 // ============ MAIN PAGE ============
 export default function Index() {
   return (
-    <motion.div
-      className="app"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <NavBar />
-      <WhoAmI />
-      <Skills />
-      <EmbeddingVisualizer3D />
-      <ResearchFocus />
-      <LossCurveTimeline />
-      <FeaturedProjects />
-      <Footer />
-    </motion.div>
+    <MotionConfig reducedMotion="user">
+      <div className="app">
+        <NavBar />
+        <WhoAmI />
+        <Skills />
+
+        <div id="repos" className="wrap">
+          <EmbeddingVisualizer3D />
+          <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+            <a
+              href="https://github.com/mathura-snth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary"
+            >
+              See all repositories on GitHub
+            </a>
+          </div>
+        </div>
+
+        <ResearchFocus />
+
+        <div id="journey" className="wrap">
+          <LossCurveTimeline />
+        </div>
+
+        <FeaturedProjects />
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }
 
@@ -263,10 +297,25 @@ function WhoAmI() {
             <a href="#projects" className="btn">
               View Work
             </a>
-            <a href="mailto:mathura2609@gmail.com" className="btn btn-secondary">
+            <a href="mailto:mathura.santhalingam@gmail.com" className="btn btn-secondary">
               Get in Touch
             </a>
           </div>
+
+          <p
+            style={{
+              ...enter(0.5),
+              marginTop: "1.75rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.7rem",
+              color: "var(--text-secondary)",
+              fontSize: "0.95rem",
+            }}
+          >
+            <span className="status-dot" aria-hidden="true" />
+            Looking for an internship leading to a CDI in data / AI
+          </p>
         </div>
       </div>
     </section>
@@ -274,137 +323,204 @@ function WhoAmI() {
 }
 
 // ============ SKILLS & EXPERTISE ============
+const SKILL_CATEGORIES = [
+  {
+    category: "Machine Learning",
+    skills: ["PyTorch", "JAX", "Scikit-learn", "XGBoost", "Transformers"],
+  },
+  {
+    category: "AI & XAI",
+    skills: [
+      "LLMs",
+      "SHAP",
+      "Attention Analysis",
+      "Formal Verification",
+      "Counterfactual Reasoning",
+    ],
+  },
+  {
+    category: "LLM Systems & Backend",
+    skills: [
+      "LangChain",
+      "LangGraph",
+      "RAG Systems",
+      "Vector DBs",
+      "FastAPI",
+      "Flask",
+      "PostgreSQL",
+      "Docker",
+    ],
+  },
+  {
+    category: "Languages",
+    skills: ["Python", "Java", "SQL", "TypeScript", "JavaScript", "Rust"],
+  },
+];
+
 function Skills() {
-  const skillCategories = [
-    {
-      category: "Machine Learning",
-      skills: ["PyTorch", "JAX", "Scikit-learn", "XGBoost", "Transformers"],
-    },
-    {
-      category: "AI & XAI",
-      skills: ["LLMs", "SHAP", "Attention Analysis", "Formal Verification", "Counterfactual Reasoning"],
-    },
-    {
-      category: "Backend & Data",
-      skills: ["FastAPI", "PostgreSQL", "LangChain", "RAG Systems", "Vector DBs"],
-    },
-    {
-      category: "Languages",
-      skills: ["Python", "TypeScript", "JavaScript", "SQL", "Rust"],
-    },
-  ];
-
   return (
-    <section className="py-20 px-4">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="space-y-12"
-        >
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl md:text-4xl font-bold"
-          >
-            <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent">
-              Skills & Expertise
-            </span>
-          </motion.h2>
+    <section id="skills" className="section">
+      <div className="section-inner">
+        <Reveal>
+          <SectionHeading title="Skills & Expertise" />
+        </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {skillCategories.map((cat, i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="p-6 rounded-lg border border-[var(--border)] bg-[var(--card-bg)]
-                           hover:border-[var(--accent)] transition-colors"
-              >
-                <h3 className="text-lg font-bold text-[var(--accent)] mb-4">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.5rem",
+          }}
+        >
+          {SKILL_CATEGORIES.map((cat, i) => (
+            <Reveal key={cat.category} delay={i * 0.08} style={{ display: "flex" }}>
+              <div className="surface-card" style={{ flex: 1 }}>
+                <h3
+                  style={{
+                    color: "var(--accent-dark)",
+                    fontSize: "1.05rem",
+                    fontWeight: 700,
+                    marginBottom: "1rem",
+                  }}
+                >
                   {cat.category}
                 </h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="tech-stack" style={{ marginBottom: 0 }}>
                   {cat.skills.map((skill) => (
-                    <motion.span
-                      key={skill}
-                      className="px-3 py-1.5 rounded-full bg-[rgba(107,166,132,0.2)]
-                               text-[var(--accent-light)] text-sm font-semibold
-                               border border-[var(--accent)]"
-                      whileHover={{ scale: 1.08, backgroundColor: "rgba(107,166,132,0.35)" }}
-                    >
+                    <span key={skill} className="tag" style={{ fontSize: "0.82rem" }}>
                       {skill}
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 // ============ RESEARCH FOCUS ============
+const INTERESTS = [
+  {
+    title: "Explainable AI (XAI)",
+    text: "Making model decisions transparent and verifiable.",
+  },
+  {
+    title: "Formal Methods",
+    text: "Rigorous verification of AI system properties.",
+  },
+  {
+    title: "Hallucination Detection",
+    text: "Identifying when LLMs fabricate information.",
+  },
+  {
+    title: "Trustworthy AI",
+    text: "Building systems that are safe, interpretable and reliable.",
+  },
+];
+
 function ResearchFocus() {
   return (
-    <section id="research" className="py-20 px-4 bg-[rgba(45,74,63,0.2)]">
-      <div className="max-w-3xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="space-y-8"
-        >
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl md:text-4xl font-bold"
+    <section id="research" className="section section-tint">
+      <div className="section-inner" style={{ maxWidth: "860px" }}>
+        <Reveal>
+          <SectionHeading title="Research Focus" />
+        </Reveal>
+
+        <Reveal>
+          <div
+            className="surface-card"
+            style={{
+              borderLeft: "4px solid var(--accent-text)",
+              padding: "2rem",
+              marginBottom: "3rem",
+            }}
           >
-            <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent">
-              Research Focus
-            </span>
-          </motion.h2>
+            <h3
+              style={{
+                color: "var(--text-primary)",
+                fontSize: "1.35rem",
+                fontWeight: 700,
+                marginBottom: "0.75rem",
+              }}
+            >
+              CoVe: Counterfactual Verification
+            </h3>
+            <p
+              style={{
+                color: "var(--text-secondary)",
+                lineHeight: 1.7,
+                marginBottom: "1.25rem",
+              }}
+            >
+              A framework for detecting hallucinated explanations in Large
+              Language Models at scale. By leveraging counterfactual reasoning
+              and formal verification techniques, CoVe identifies when an LLM
+              gives an explanation that doesn't reflect how it actually
+              decided.
+            </p>
+            <p
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.7rem",
+                color: "var(--accent-dark)",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+              }}
+            >
+              <span className="status-dot" aria-hidden="true" />
+              In progress at LIPN, since June 2026
+            </p>
+          </div>
+        </Reveal>
 
-          <motion.div variants={itemVariants} className="space-y-6 text-[var(--text-secondary)]">
-            <div className="space-y-3">
-              <h3 className="text-xl font-semibold text-white">
-                CoVe: Counterfactual Verification
-              </h3>
-              <p className="text-lg leading-relaxed">
-                A framework for detecting hallucinated explanations in Large Language Models at scale. By leveraging counterfactual reasoning and formal verification techniques, CoVe identifies when LLMs generate explanations that don't reflect their actual decision-making process.
-              </p>
-              <p className="text-base text-[var(--text-secondary)]">
-                Currently being developed as part of my M2 research internship at LIPN (Laboratoire d'Informatique de l'Université Paris Nord).
-              </p>
-            </div>
+        <Reveal>
+          <h3
+            style={{
+              color: "var(--accent-dark)",
+              fontSize: "1.2rem",
+              fontWeight: 700,
+              marginBottom: "1.25rem",
+            }}
+          >
+            Core research interests
+          </h3>
+        </Reveal>
 
-            <div className="space-y-3 pt-4">
-              <h3 className="text-xl font-semibold text-white">
-                Core Research Interests
-              </h3>
-              <ul className="space-y-2 text-lg">
-                <li className="flex gap-2">
-                  <span className="text-[var(--accent)]">→</span>
-                  <span><strong>Explainable AI (XAI)</strong> — Making model decisions transparent and verifiable</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[var(--accent)]">→</span>
-                  <span><strong>Formal Methods</strong> — Rigorous verification of AI system properties</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[var(--accent)]">→</span>
-                  <span><strong>Hallucination Detection</strong> — Identifying when LLMs fabricate information</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[var(--accent)]">→</span>
-                  <span><strong>Trustworthy AI</strong> — Building AI systems that are safe, interpretable, and reliable</span>
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-        </motion.div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: "1.5rem 2rem",
+          }}
+        >
+          {INTERESTS.map((item, i) => (
+            <Reveal key={item.title} delay={i * 0.08}>
+              <div
+                style={{
+                  borderLeft: "2px solid var(--accent)",
+                  paddingLeft: "1rem",
+                }}
+              >
+                <h4
+                  style={{
+                    color: "var(--text-primary)",
+                    fontWeight: 700,
+                    marginBottom: "0.25rem",
+                  }}
+                >
+                  {item.title}
+                </h4>
+                <p style={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                  {item.text}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -413,83 +529,122 @@ function ResearchFocus() {
 // ============ FEATURED PROJECTS ============
 interface Project {
   title: string;
+  category: string;
   description: string;
   tech: string[];
+  href?: string;
 }
 
 const projects: Project[] = [
   {
     title: "CoVe - LLM Explanation Verification",
-    description: "Framework for verifying LLM explanations and detecting hallucinations at scale",
+    category: "LLM Research",
+    description:
+      "Framework for verifying LLM explanations and detecting hallucinations at scale.",
     tech: ["PyTorch", "XAI", "LLMs"],
+    href: "https://github.com/mathura-snth/XAI-LLM-CoVe_Verification",
   },
   {
     title: "DentaRAG",
-    description: "Retrieval-Augmented Generation system for medical documentation",
+    category: "LLM Applications",
+    description:
+      "Retrieval-Augmented Generation system for medical documentation, built with hybrid search.",
     tech: ["LangChain", "FastAPI", "PostgreSQL"],
+    href: "https://github.com/mathura-snth/RAG_from_scratch",
+  },
+  {
+    title: "Routes Optimization",
+    category: "Algorithms & Systems",
+    description:
+      "Route planning engine on real OpenStreetMap data, from Dijkstra to Contraction Hierarchies.",
+    tech: ["Dijkstra", "A*", "Contraction Hierarchies"],
+    href: "https://github.com/mathura-snth/Advanced-Route-Optimization",
   },
   {
     title: "EducAid - Student Performance Prediction",
-    description: "ML ensemble for predicting academic outcomes",
+    category: "Machine Learning",
+    description: "ML ensemble for predicting academic outcomes.",
     tech: ["XGBoost", "CatBoost", "Python"],
   },
 ];
 
 function FeaturedProjects() {
   return (
-    <section id="projects" className="py-20 px-4">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="space-y-12"
-        >
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl md:text-4xl font-bold"
-          >
-            <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent">
-              Featured Projects
-            </span>
-          </motion.h2>
+    <section id="projects" className="projects-section">
+      <div className="section-inner">
+        <Reveal>
+          <SectionHeading
+            title="Featured Projects"
+            subtitle="A selection of what I've built, from research code to full systems."
+          />
+        </Reveal>
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+        <div className="projects-grid">
+          {projects.map((project, i) => {
+            const Card: React.ElementType = project.href ? "a" : "div";
+            const linkProps = project.href
+              ? { href: project.href, target: "_blank", rel: "noopener noreferrer" }
+              : {};
+            return (
+              <Reveal key={project.title} delay={i * 0.08} style={{ display: "flex" }}>
+                <Card
+                  className="project-card"
+                  style={{ flex: 1, cursor: project.href ? "pointer" : "default" }}
+                  {...linkProps}
+                >
+                  <span className="badge">{project.category}</span>
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  <div className="tech-stack">
+                    {project.tech.map((t) => (
+                      <span key={t} className="tag">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  {project.href && (
+                    <span className="github-link">View on GitHub →</span>
+                  )}
+                </Card>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal style={{ marginTop: "2.5rem" }}>
+          <a
+            href="/notes"
+            className="surface-card"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "1rem 2rem",
+              textDecoration: "none",
+            }}
           >
-            {projects.map((project, i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="p-6 rounded-lg border border-[var(--border)] bg-[var(--card-bg)]
-                           hover:border-[var(--accent)] transition-colors"
+            <div style={{ maxWidth: "36rem" }}>
+              <h3
+                style={{
+                  color: "var(--text-primary)",
+                  fontSize: "1.2rem",
+                  fontWeight: 700,
+                  marginBottom: "0.4rem",
+                }}
               >
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-[var(--text-secondary)] mb-4">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 rounded text-xs font-medium
-                               bg-[rgba(107,166,132,0.15)] text-[var(--accent-light)]"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
+                Study notes
+              </h3>
+              <p style={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                My Master's course notes as PDFs: data structures, distributed
+                systems, computability, topology, NLP and more.
+              </p>
+            </div>
+            <span className="github-link" style={{ marginTop: 0 }}>
+              Browse the notes →
+            </span>
+          </a>
+        </Reveal>
       </div>
     </section>
   );
@@ -498,13 +653,7 @@ function FeaturedProjects() {
 // ============ FOOTER ============
 function Footer() {
   return (
-    <motion.footer
-      className="footer"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-    >
+    <footer className="footer">
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
@@ -533,30 +682,24 @@ function Footer() {
                   LinkedIn
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://scholar.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Scholar
-                </a>
-              </li>
             </ul>
           </div>
 
           <div className="footer-section">
             <h4>Contact</h4>
             <p>
-              <a href="mailto:mathura2609@gmail.com">mathura2609@gmail.com</a>
+              <a href="mailto:mathura.santhalingam@gmail.com">mathura.santhalingam@gmail.com</a>
             </p>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2026 Mathura. Built with React & Framer Motion.</p>
+          <p>
+            &copy; 2026 Mathura. Built with React Router, Framer Motion &amp;
+            Three.js.
+          </p>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

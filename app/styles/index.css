@@ -361,3 +361,98 @@
     opacity: 1;
   }
 }
+
+/* ==========================================================
+   Polish : rythme des sections, cartes, statut, accessibilité
+   ========================================================== */
+html { scroll-behavior: smooth; }
+section[id], div[id] { scroll-margin-top: 5.5rem; }
+
+::selection { background: var(--accent-light); color: var(--accent-dark); }
+
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.section { padding: 5rem 2rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-tint { background: rgb(var(--accent-rgb) / 0.12); }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 1rem; }
+.projects-section .section-inner { max-width: 1100px; }
+
+.section-title { font-size: clamp(1.9rem, 5vw, 2.5rem); }
+.section-subtitle { max-width: 40rem; }
+
+.surface-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(62, 90, 78, 0.06);
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+}
+.surface-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(62, 90, 78, 0.12);
+}
+a.surface-card:hover { transform: translateY(-3px); }
+
+.project-card:hover { transform: translateY(-4px); }
+
+/* Point pulsant "en cours" */
+.status-dot {
+  flex-shrink: 0;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--accent-text);
+  box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.6);
+  animation: status-ping 2s ease-out infinite;
+}
+@keyframes status-ping {
+  70%  { box-shadow: 0 0 0 0.6rem rgb(var(--accent-rgb) / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0); }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 3.5rem 1rem; }
+  .wrap { padding: 2rem 1rem 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================
+   Footer : fond vert foncé pour se détacher de la section Projects
+   ========================================================== */
+.footer {
+  background: var(--accent-dark);
+  border-top: none;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: #fff;
+}
+
+.footer-section a {
+  color: rgb(255 255 255 / 0.75);
+}
+
+.footer-section a:hover {
+  color: var(--accent-light);
+}
+
+.footer-bottom {
+  border-top-color: rgb(255 255 255 / 0.18);
+  color: rgb(255 255 255 / 0.65);
+}
