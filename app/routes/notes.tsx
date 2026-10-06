@@ -14,17 +14,17 @@ const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [
   {
     id: "ai",
     label: "AI & NLP",
-    blurb: "Natural language processing.",
+    blurb: "Natural language processing and retrieval-augmented generation.",
   },
   {
     id: "math",
     label: "Mathematics",
-    blurb: "Linear algebra, analysis and topology.",
+    blurb: "Linear algebra and mathematical analysis.",
   },
   {
     id: "theory",
     label: "Theory & Algorithms",
-    blurb: "Data structures, computability, complexity and type systems.",
+    blurb: "Data structures, computability, complexity, type systems and compilation.",
   },
   {
     id: "systems",
@@ -39,19 +39,13 @@ const NOTES: Note[] = [
     id: "linear-algebra",
     title: "Linear Algebra",
     category: "math",
-    path: "/pdfs/Linear-Abstract-Algebra.pdf",
+    path: "/pdfs/Algebra.pdf",
   },
   {
     id: "math-analysis",
     title: "Mathematical Analysis",
     category: "math",
-    path: "/pdfs/Mathematical-Analysis.pdf",
-  },
-  {
-    id: "topology",
-    title: "Topology",
-    category: "math",
-    path: "/pdfs/Topology.pdf",
+    path: "/pdfs/Mathematical_Analysis.pdf",
   },
 
   // Theory & Algorithms
@@ -59,19 +53,32 @@ const NOTES: Note[] = [
     id: "advanced-data-structures",
     title: "Advanced Data Structures",
     category: "theory",
-    path: "/pdfs/Advanced-Data-Structures.pdf",
+    path: "/pdfs/Advanced_Data_Structures.pdf",
+  },
+  {
+    id: "computability-basics",
+    title: "Computability Basics",
+    category: "theory",
+    path: "/pdfs/Computability_Basis.pdf",
   },
   {
     id: "computability-complexity",
     title: "Computability & Complexity",
     category: "theory",
-    path: "/pdfs/Computability-Complexity.pdf",
+    // TODO : vérifie ce nom exact (il était tronqué dans ta capture)
+    path: "/pdfs/Computability_Complexity_compressed.pdf",
   },
   {
     id: "lambda-calculus",
-    title: "Lambda Calculus & Type Systems",
+    title: "Lambda Calculus",
     category: "theory",
-    path: "/pdfs/Lambda-Calculus-Type-Systems.pdf",
+    path: "/pdfs/Lambda_Calculus.pdf",
+  },
+  {
+    id: "compilation",
+    title: "Compilation",
+    category: "theory",
+    path: "/pdfs/Compilation.pdf",
   },
 
   // Systems & Data
@@ -79,19 +86,19 @@ const NOTES: Note[] = [
     id: "distributed-systems",
     title: "Distributed Systems",
     category: "systems",
-    path: "/pdfs/Distributed-Systems.pdf",
+    path: "/pdfs/Distributed_Systems.pdf",
   },
   {
     id: "software-architecture",
     title: "Software Architecture & Docker",
     category: "systems",
-    path: "/pdfs/Software-Architecture-Docker.pdf",
+    path: "/pdfs/Software_Architecture_Docker.pdf",
   },
   {
     id: "sql-databases",
     title: "SQL & Relational Databases",
     category: "systems",
-    path: "/pdfs/Exercices-SQL-Relational-Databases.pdf",
+    path: "/pdfs/SQL_Relational_DB.pdf",
   },
 
   // AI & NLP
@@ -99,7 +106,13 @@ const NOTES: Note[] = [
     id: "nlp",
     title: "Natural Language Processing",
     category: "ai",
-    path: "/pdfs/NPL.pdf",
+    path: "/pdfs/NLP.pdf",
+  },
+  {
+    id: "rag",
+    title: "Retrieval-Augmented Generation",
+    category: "ai",
+    path: "/pdfs/RAG.pdf",
   },
 ];
 

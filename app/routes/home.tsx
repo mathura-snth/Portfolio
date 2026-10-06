@@ -297,7 +297,7 @@ function WhoAmI() {
             <a href="#projects" className="btn">
               View Work
             </a>
-            <a href="mailto:mathura.santhalingam@gmail.com" className="btn btn-secondary">
+            <a href="mailto:mathura2609@gmail.com" className="btn btn-secondary">
               Get in Touch
             </a>
           </div>
@@ -637,7 +637,7 @@ function FeaturedProjects() {
               </h3>
               <p style={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
                 My Master's course notes as PDFs: data structures, distributed
-                systems, computability, topology, NLP and more.
+                systems, computability, compilation, NLP and more.
               </p>
             </div>
             <span className="github-link" style={{ marginTop: 0 }}>
@@ -688,7 +688,7 @@ function Footer() {
           <div className="footer-section">
             <h4>Contact</h4>
             <p>
-              <a href="mailto:mathura.santhalingam@gmail.com">mathura.santhalingam@gmail.com</a>
+              <a href="mailto:mathura2609@gmail.com">mathura2609@gmail.com</a>
             </p>
           </div>
         </div>
