@@ -2,9 +2,9 @@
   "name": "mathu-portfolio",
   "private": true,
   "type": "module",
-  "homepage": "https://votre-pseudo-github.github.io/Portfolio",
+  "homepage": "https://mathura-snth.github.io",
   "scripts": {
-    "build": "react-router build",
+    "build": "react-router build && cp build/client/index.html build/client/404.html",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
