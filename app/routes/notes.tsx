@@ -69,6 +69,12 @@ const NOTES: Note[] = [
     path: "/pdfs/Computability_Complexity_compressed.pdf",
   },
   {
+    id: "preuve-formelle",
+    title: "Preuves Formelles",
+    category: "theory",
+    path: "/pdfs/Preuves_Formelles.pdf",
+  },
+  {
     id: "lambda-calculus",
     title: "Lambda Calculus",
     category: "theory",
