@@ -35,6 +35,17 @@ const GITHUB_REPOS: DataPoint[] = [
   { id: "distributed-2pc", x: -1, y: -13, z: -9, category: "Algorithms & Systems", label: "Distributed-System-2PC", github: "https://github.com/mathura-snth", keywords: ["Java", "2PC", "Sockets", "Multithreading", "ReentrantLock"] },
   { id: "mpi-distributed", x: -4, y: -12, z: -14, category: "Algorithms & Systems", label: "MPI-Distributed-Algorithms", github: "https://github.com/mathura-snth/MPI-Distributed-Algorithms", keywords: ["MPI", "Distributed Algorithms", "Parallel Computing"] },
   { id: "microservices-demo", x: 1, y: -9, z: -12, category: "Algorithms & Systems", label: "Microservices-Architecture-Demo", github: "https://github.com/mathura-snth/Microservices-Architecture-Demo", keywords: ["Microservices", "Software Architecture"] },
+  { id: "knapsack", x: -9, y: -12, z: -8, category: "Algorithms & Systems", label: "Knapsack", github: "https://github.com/mathura-snth/Knapsack", keywords: ["Knapsack Problem", "Optimization"] },
+
+  // --- Programming & Logic : programmation fonctionnelle, logique, jeux ---
+  { id: "tautologie-ocaml", x: 15, y: -6, z: 6, category: "Programming & Logic", label: "Tautologie-OCaml", github: "https://github.com/mathura-snth/Tautologie-OCaml", keywords: ["OCaml", "Propositional Logic", "Functional Programming"] },
+  { id: "zork", x: 12, y: -11, z: 11, category: "Programming & Logic", label: "Zork", github: "https://github.com/mathura-snth/Zork", keywords: ["Text Adventure", "Game Design"] },
+
+  // --- Data & Web ---
+  { id: "m1-ingenierie-donnees", x: -16, y: -2, z: 12, category: "Data & Web", label: "M1-Ingenierie_Donnees", github: "https://github.com/mathura-snth/M1-Ingenierie_Donnees", keywords: ["Data Engineering", "M1 Coursework"] },
+  { id: "wikicomptines", x: -11, y: 2, z: 17, category: "Data & Web", label: "Wikicomptines", github: "https://github.com/mathura-snth/Wikicomptines", keywords: ["Web", "Data"] },
+  { id: "microdon", x: -19, y: -7, z: 8, category: "Data & Web", label: "Microdon", github: "https://github.com/mathura-snth/Microdon", keywords: ["Web App"] },
+  { id: "robbie-lens", x: -8, y: -5, z: 19, category: "Data & Web", label: "Robbie-Lens", github: "https://github.com/mathura-snth/Robbie-Lens", keywords: ["Software Project"] },
 ];
 
 // Seulement les catégories réellement utilisées

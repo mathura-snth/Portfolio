@@ -7,7 +7,8 @@ export const CATEGORY_COLORS: Record<string, string> = {
   "LLM Applications": "#d98c5f",
   "NLP & Search": "#5b8db8",
   "Algorithms & Systems": "#c75f6b",
-  Education: "#9a7bb5",
+  "Programming & Logic": "#9a7bb5",
+  "Data & Web": "#c9a24b",
 };
 
 // Couleurs de la grille 3D (équivalents hex de --border et d'une teinte plus claire)

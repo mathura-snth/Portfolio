@@ -142,7 +142,7 @@ const WHO_STATS = [
       "Top of my Master 1 class, with a double degree in Math & CS behind it.",
   },
   {
-    value: "5+",
+    value: "10+",
     label: "Projects",
     detail:
       "Beyond coursework, I keep building: RAG, agentic AI, route optimization, distributed systems.",
